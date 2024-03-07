@@ -1,0 +1,6 @@
+:deep(.ivu-btn-ghost.ivu-btn-primary) {
+  color: #ea6240;
+}
+:deep(.ivu-btn-primary) {
+  border-color: #ea6240;
+}
