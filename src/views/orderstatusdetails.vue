@@ -78,17 +78,17 @@
         <div>
           <span class="oc_b_n">配送费：</span><span class="oc_b_p">¥ 0.00</span>
         </div>
-        <div>
+        <!-- <div>
           <span class="oc_b_n">优惠金额：</span
           ><span class="oc_b_p">¥ 10.00</span>
-        </div>
+        </div> -->
         <div>
           <span class="oc_b_n">应付金额：</span
           ><span class="oc_b_p">¥ {{ orderdetailsList.actualPay }}</span>
         </div>
         <div v-if="orderdetailsList.orderStatus == '000' ? true : false">
           <div class="quxiao" @click="cancelOrderInfo">取消订单</div>
-          <div class="gopay">去支付</div>
+          <div class="gopay" @click="paybutton">去支付</div>
         </div>
       </div>
     </div>
@@ -269,7 +269,7 @@ export default {
   },
   created() {
     this.orderdetailsList = JSON.parse(this.$route.query.orderitemd);
-    console.log(JSON.parse(this.$route.query.orderitemd));
+    console.log('sssssss',this.orderdetailsList);
   },
   mounted() {},
   methods: {
@@ -309,7 +309,14 @@ export default {
         this.selectOrderError = true;
       }
     },
+    paybutton() {
+      this.$router.push({
+      path: `/pc/commitOrder?dataId=${this.orderdetailsList.id}&total=${this.orderdetailsList.total}`,
+    })
+    }
+    
   },
+  
 };
 </script>
 

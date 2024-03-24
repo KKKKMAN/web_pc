@@ -46,7 +46,7 @@
             @on-change="handleCheckItem(item, index)"
           ></Checkbox>
 
-          <img :src="item.productImageLink" alt="" />
+          <img :src="productImageLink(item)" alt="" />
           <span>{{ item.productName }}</span>
         </div>
         <div>¥{{ item.price }}</div>
@@ -119,6 +119,15 @@ export default {
     },
   },
   computed: {
+    productImageLink() {
+      return (item) => {
+        const image = item.productImageLink ? item.productImageLink.split(",") : null
+        if(image && image.length > 0) {
+          return image[0]
+        }
+        return ''
+      }
+    },
     shoppAdds() {
       var total = 0;
       for (var i = 0; i < this.cuponListDataList.length; i++) {

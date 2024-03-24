@@ -1,30 +1,31 @@
 <template>
   <div class="mycoupon">
     <orderBreadcrumb :title="title" />
-    <Tabs value="name1">
+    <Tabs value="name1" @on-click="onTabChange">
       <TabPane label="未使用" name="name1">
         <Table stripe :columns="unusedColumns" :data="unusedData">
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" ghost label="large" @click="dataItem(row)"
-              >使用</Button>
+              >使用</Button
+            >
           </template>
         </Table>
       </TabPane>
       <TabPane label="已使用" name="name2">
-        <Table stripe :columns="columns2">
+        <Table stripe :columns="columns2" :data="unusedData">
           <template slot="action">
             <span style="color: #ea6240">已使用</span>
           </template></Table
         >
       </TabPane>
       <TabPane label="已过期" name="name3">
-        <Table stripe :columns="columns3">
+        <Table stripe :columns="columns3" :data="unusedData">
           <template slot="action"> 已过期 </template></Table
         >
       </TabPane>
     </Tabs>
     <Page
-      :current="currentNum"
+      :current="paramsData.currPage"
       :total="totalNum"
       show-total
       :page-size="pageSize"
@@ -79,22 +80,22 @@ export default {
       columns2: [
         {
           title: "面额",
-          key: "miane",
+          key: "couponPrice",
         },
         {
           title: "适用范围",
-          key: "shiyonfanwei",
+          key: "shopName",
         },
         {
           title: "有效期",
-          key: "youxiaoqi",
+          key: "endTime",
         },
         {
           title: "领取来源",
-          key: "linqilaiyuan",
+          key: "title",
         },
         {
-          title: "状态",
+          title: "操作",
           key: "action",
           slot: "action",
           width: 150,
@@ -104,19 +105,19 @@ export default {
       columns3: [
         {
           title: "面额",
-          key: "miane",
+          key: "couponPrice",
         },
         {
           title: "适用范围",
-          key: "shiyonfanwei",
+          key: "shopName",
         },
         {
           title: "有效期",
-          key: "youxiaoqi",
+          key: "endTime",
         },
         {
           title: "领取来源",
-          key: "linqilaiyuan",
+          key: "title",
         },
         {
           title: "状态",
@@ -126,6 +127,12 @@ export default {
           align: "center",
         },
       ],
+      paramsData: {
+        currPage: 1,
+        records: 10,
+        status: 0, //状态：0-未使用，1-已使用，2-已过期
+        queryCondition01: "",
+      }
     };
   },
   created() {},
@@ -133,6 +140,17 @@ export default {
     this.gettUserShopCouponListInfo();
   },
   methods: {
+    onTabChange(name) {
+      if(name === 'name1'){
+        this.paramsData.status = 0;
+      }else if(name === 'name2') {
+        this.paramsData.status = 1;
+      } else if(name === 'name3') {
+        this.paramsData.status = 2;
+      }
+      this.paramsData.currPage = 1;
+      this.gettUserShopCouponListInfo();
+    },
     dataItem(value) {
       // console.log(value, "value");
       this.$router.push({
@@ -144,18 +162,13 @@ export default {
     },
     // 页码改变
     onChange(e) {
-      this.currentNum = e;
+      // this.currentNum = e;
+      this.paramsData.currPage = e;
       this.gettUserShopCouponListInfo();
     },
     // 我的优惠卷
     gettUserShopCouponListInfo() {
-      var userShopcouponFrom = {
-        currPage: this.currentNum,
-        records: 10,
-        status: 1,
-        queryCondition01: "",
-      };
-      gettUserShopCouponList(userShopcouponFrom).then((res) => {
+      gettUserShopCouponList(this.paramsData).then((res) => {
         this.unusedData = res.data.list;
         this.totalNum = res.data.total;
       });
@@ -187,7 +200,7 @@ export default {
 :deep(.ivu-btn-primary:focus) {
   box-shadow: 0 0 10px 2px #eb6b4b3e;
 }
-:deep(.ivu-table-row:hover){
+:deep(.ivu-table-row:hover) {
   background-color: orange !important;
 }
 .mycoupon {

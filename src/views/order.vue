@@ -62,7 +62,7 @@
                 </div>
                 <div class="e">
                   <div class="ee" v-if="v.orderStatus == '000'">
-                    <div class="c_p video_class">去支付</div>
+                    <div class="c_p video_class" @click="payzhifu(v)">去支付</div>
                   </div>
                   <div class="ee" v-if="v.orderStatus == '003'">
                     <div v-if="v.videoCall == 1">
@@ -73,12 +73,12 @@
                   </div>
                   <span v-if="v.orderStatus == '007' || '008' || '009'"></span>
                   <div class="ee" v-if="v.orderStatus == '006'">
-                    <div class="c_p recur">去评价</div>
-                    <div class="c_p recur">再来一单</div>
+                    <div class="c_p recur" @click="Gotocomment(v)">去评价</div>
+                    <div class="c_p recur" @click="Onemoreorder(v,v.productItemsList)">再来一单</div>
                   </div>
                   <div class="ee" v-if="v.orderStatus == '200'">
-                    <div class="c_p recur">去评价</div>
-                    <div class="c_p recur" @click="recurMonad">再来一单</div>
+                    <div class="c_p recur" @click="Gotocomment(v)">去评价</div>
+                    <div class="c_p recur" @click="Onemoreorder(v,v.productItemsList)">再来一单</div>
                   </div>
                 </div>
               </div>
@@ -159,7 +159,8 @@
                   </div>
                   <div class="e">
                     <div class="ee">
-                      <div class="c_p video_class">去支付</div>
+                      <div class="c_p video_class" @click="payzhifu(v)">去支付</div>
+                       <div class="c_p video_class" @click="confirmInfo(v)">取消订单</div>
                     </div>
                   </div>
                 </div>
@@ -329,9 +330,9 @@
                   </div>
                   <div class="e">
                     <div class="ee">
-                      <div class="c_p video_class" @click="confirmInfo(v)">
+                      <!-- <div class="c_p video_class" @click="confirmInfo(v)">
                         取消订单
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -413,8 +414,8 @@
                   </div>
                   <div class="e">
                     <div class="ee">
-                      <div class="c_p video_class">去评论</div>
-                      <div class="c_p video_class">再来一单</div>
+                      <div class="c_p video_class" @click="Gotocomment(v)">去评论</div>
+                      <div class="c_p video_class" @click="Onemoreorder(v,v.productItemsList)">再来一单</div>
                     </div>
                   </div>
                 </div>
@@ -496,8 +497,8 @@
                   </div>
                   <div class="e">
                     <div class="ee">
-                      <div class="c_p video_class">去评价</div>
-                      <div class="c_p video_class">再来一单</div>
+                      <div class="c_p video_class" @click="Gotocomment(v)">去评价</div>
+                      <div class="c_p video_class" @click="Onemoreorder(v,v.productItemsList)">再来一单</div>
                     </div>
                   </div>
                 </div>
@@ -579,8 +580,8 @@
                   </div>
                   <div class="e">
                     <div class="ee">
-                      <div class="c_p video_class">查看评价</div>
-                      <div class="c_p video_class">再来一单</div>
+                      <div class="c_p video_class" @click="Gotocomment(v)">查看评价</div>
+                      <div class="c_p video_class" @click="Onemoreorder(v,v.productItemsList)">再来一单</div>
                     </div>
                   </div>
                 </div>
@@ -674,11 +675,43 @@
         </div>
       </div>
     </div>
+    <!-- 取消模态框 -->
+    <Modal v-model="cancelOrderFormShow" draggable width="700">
+      <p
+        slot="header"
+        style="color: #f60; text-align: center; text-align: left"
+      >
+        <Icon type="ios-information-circle" :size="20"></Icon>
+        <span style="margin-left: 10px">选择取消原因</span>
+      </p>
+      <div class="it_con" style="text-align: center">
+        <div
+          class="it_box"
+          tabindex="1"
+          v-for="(v, i) in textI"
+          :key="i"
+          @click="textIclick(v)"
+        >
+          {{ v }}
+        </div>
+      </div>
+      <div class="errquxiao" v-if="selectOrderError">请选择一种取消原因</div>
+      <div slot="footer" style="padding: 12px 62px">
+        <Button
+          style="background-color: #ea6240"
+          type="error"
+          size="large"
+          long
+          @click="commit"
+          >提交</Button
+        >
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
-import { getOrderList, getAllCommentByUserId,confirmReceived } from "@/utils/api";
+import { getOrderList, getAllCommentByUserId,confirmReceived, cancelOrder ,createOneMoreOrder} from "@/utils/api";
 import OrderBreadcrumb from "../components/orderBreadcrumb.vue";
 import { connectFn, unsubscribe, unconnect } from "@/utils/mqtt";
 export default {
@@ -715,6 +748,19 @@ export default {
       awaitReviewedListData: [], //待评论
       accomplishListData: [], //已完成
       commentListData: [], //已评论
+      orderdetailsList: {},
+      cancelOrderFormShow: false,
+      textI: [
+        "不想要了/临时有事",
+        "买错了/买多了/买少了",
+        "地址/电话填写错误",
+        "送达时间选错",
+        "忘记写备注",
+        "重复下单",
+        "其他原因",
+      ],
+      textIValue: "", //取消原因
+      selectOrderError: false, //选择一种取消原因文字提示
       allOrder: (h) => {
         return h("div", [
           h("span", "全部订单"),
@@ -760,6 +806,18 @@ export default {
     };
   },
   created() {},
+  watch: {
+    // selectOrderError() {
+    //   return this.textIValue;
+    // },
+    textIValue(newda, oldda) {
+      if (newda) {
+        this.selectOrderError = false;
+      } else {
+        this.selectOrderError = true;
+      }
+    },
+  },
   mounted() {
     this.title = this.$route.meta.title;
     this.getOrderListInfo(); //全部订单
@@ -771,6 +829,15 @@ export default {
     this.getawaitReviewedOrderListInfoppl(); //已评价
   },
   methods: {
+
+    //去评论
+  Gotocomment(v) {
+    this.$router.push({
+      path: `/pc/review?id=${v.id}&shopId=${v.shopId}&hasComments=${v.hasComments}&orderStatus=${v.orderStatus}&shopLogo=${v.shopLogo}&shopName=${v.shopName}`,
+    })
+    console.log(v)
+  },
+
     // tabs item 点击事件
     tabsClickItem(name) {
       switch (name) {
@@ -948,9 +1015,44 @@ export default {
       });
     },
     // 取消订单
-    confirmInfo(data){
-
-    }
+    confirmInfo(v){ 
+      console.log(v)
+      this.orderdetailsList = v.id
+      this.cancelOrderFormShow = true
+    },
+     // 取消原因选择
+     textIclick(value) {
+      this.textIValue = value;
+    },
+      // 提交
+      commit() {
+      let cancelOrderForm = {
+        id: this.orderdetailsList,
+        queryCondition01: this.textIValue,
+      };
+      if (cancelOrderForm.queryCondition01 !== "") {
+        console.log(cancelOrderForm);
+        this.cancelOrderFormShow = false;
+        cancelOrder(cancelOrderForm).then((res) => {
+          console.log(res, "res");
+          if (res) {
+            if (res.status == 200) {
+              this.$Message.success({
+                content: res.message,
+                duration: 4,
+              });
+            } else {
+              this.$Message.error({
+                content: res.message,
+                duration: 4,
+              });
+            }
+          }
+        });
+      } else {
+        this.selectOrderError = true;
+      }
+    },
     // 视频确定
     // videoSueeccInfo() {
     //   this.videoBoxShow = true;
@@ -1012,10 +1114,76 @@ export default {
     //       console.log(err.name + ": " + err.message);
     //     });
     // },
+    //去支付
+    payzhifu(v) {
+    console.log(v)
+    this.$router.push({
+        path: `/pc/commitOrder?dataId=${v.id}&total=${v.total}`,
+       
+      });
   },
+  //再来一单
+  Onemoreorder(v,productItemsList) {
+    console.log(productItemsList.productId)
+    let parms = {
+      queryCondition01: v.orderStatus,
+      id: v.id
+    }
+    createOneMoreOrder(parms).then(res => {
+      console.log(res)
+      if(res.status == 200) {
+        this.$Message.success({
+                content: res.message,
+                duration: 4,
+            });
+            this.$router.push({
+              path:`/pc/commoditydetailpage?productId=${v.productItemsList[0].productId}&shopId=${v.shopId}&logoImg=${v.shopLogo}&phone=${v.phone}&shopName=${v.shopName}`
+            })
+      //       this.$router.push({
+      //   path: `/pc/commitOrder?dataId=${v.id}&total=${v.total}`,
+       
+      // });
+      } else {
+        this.$Message.error({
+                content: res.message,
+                duration: 4,
+              });
+      }
+    })
+  }
+  },
+
+  
 };
 </script>
 <style lang="scss" scoped>
+.errquxiao {
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  color: red;
+}
+:deep(.ivu-modal-body) {
+  padding: 50px 80px 20px 80px;
+}
+.it_con {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+
+  .it_box {
+    padding: 8px 15px;
+    color: #666666;
+    cursor: pointer;
+    // background-color: #ea6240;
+    border: 1px solid #999999;
+  }
+  .it_box:focus {
+    color: #fff;
+    background-color: #ea6240;
+    border: 1px solid #ea6240;
+  }
+}
 .videoBoxClass {
   z-index: 999;
   width: 100vw;

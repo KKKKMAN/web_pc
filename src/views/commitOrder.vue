@@ -12,7 +12,7 @@
               >请于
               <span class="commitorder_color">
                 <!-- <CountDown :target="dataTime"  v-font="20" /> -->
-                23分18秒内支付完成</span
+                24小时内支付完成</span
               >
             </span>
           </p>
@@ -32,7 +32,7 @@
           <span>微信支付</span>
         </div>
         <div v-else>
-          <img src="../assets/wacthlog.png" alt="" />
+          <img src="../assets/zfbicon.png" alt="" />
           <span>支付宝支付</span>
         </div>
         <div tabindex="1" @click="cutPayClick">
@@ -54,19 +54,19 @@
           />
         </div>
         <div v-show="!payShow">
-          <!-- <iframe
-            id="alipayFrame"
+       <iframe
             :srcdoc="srcdocUrl"
             frameborder="no"
             border="0"
             marginwidth="0"
             marginheight="0"
             scrolling="no"
-            width="200"
-            height="200"
+            width="300"
+            height="300"
             style="overflow: hidden"
-          >
-          </iframe> -->
+          >          
+          </iframe>
+         
         </div>
 
         <p>扫一扫快速付款</p>
@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { orderPay, createQrCode, wxNotifyPlay } from "../utils/api";
+import { orderPay, createQrCode, wxNotifyPlay ,createQrCodes} from "../utils/api";
 import vueQr from "vue-qr";
 import { socket } from "@/utils/websocket";
 export default {
@@ -113,6 +113,7 @@ export default {
   components: { vueQr },
   data() {
     return {
+      alipay: '',
       dataTime: new Date().getTime() + 30000,
       playTime: false,
       playsucces: true,
@@ -130,8 +131,8 @@ export default {
     this.dataId = this.$route.query.dataId;
     this.createQrCodeWXInfo();
     // 发起连接
-    socket.init();
-    // this.createQrCodeZFBInfo(); //支付宝form 获取
+    // socket.init();
+    
   },
   methods: {
     ok() {},
@@ -148,6 +149,9 @@ export default {
     cutPayClick() {
       this.payShow = !this.payShow;
       this.textPay = this.payShow ? "微信" : "支付宝";
+      if(!this.payShow) {
+        this.createQrCodeZFBInfo(); //支付宝form 获取
+      }
     },
     //微信支付
     createQrCodeWXInfo() {
@@ -156,10 +160,11 @@ export default {
         queryCondition02: "wx", //支付类型 wx；zfb
       };
       createQrCode(data).then((res) => {
+        console.log(res)
         if (res || res.status === 200) {
           if (res.data) {
             this.wechatSrc = res.data;
-            socket.receive();
+            // socket.receive();
           } else {
             this.appSrc = res.message;
           }
@@ -173,13 +178,28 @@ export default {
         queryCondition01: this.dataId, //订单编号
         queryCondition02: "zfb", //支付类型 wx；zfb
       };
-      createQrCode(data).then((res) => {
-        if (res || res.status === 200) {
-          console.log(res, "获取支付宝二维码");
-          this.srcdocUrl = res.data;
-        }
+      createQrCodes(data).then((res) => {
+       
+          this.srcdocUrl = res.data
+          // 添加之前先删除一下，如果单页面，页面不刷新，添加进去的内容会一直保留在页面中，二次调用form表单会出错
+        // const divForm = document.getElementsByTagName("div");
+        // if (divForm.length) {
+        //   document.body.removeChild(divForm[0]);
+        // }
+        // const div = document.createElement("div");
+        // div.innerHTML = res.data; // data就是接口返回的form 表单字符串
+        // document.body.appendChild(div);
+        // document.forms[0].setAttribute("target", "_blank"); // 新开窗口跳转
+        // document.forms[0].submit();
+        
+        //   console.log(res, "获取支付宝二维码");
+          // document.querySelector("body").innerHTML = res.data;
+          //   document.forms[0].submit();
+
+        
       });
     },
+   
   },
 };
 </script>

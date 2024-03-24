@@ -50,8 +50,8 @@
                   {{ v.shopName }} <span class="pfengBox">{{ v.score }}</span>
                 </div>
                 <div>
-                  <span style="margin-right: 24px">起送价 ¥20</span>
-                  <span>配送费 ¥20</span>
+                  <span style="margin-right: 24px">起送价 ¥{{v.minCharge}}</span>
+                  <!-- <span>配送费 ¥20</span> -->
                 </div>
               </div>
               <div class="sortBoxTopitemright">
@@ -86,11 +86,12 @@
                   "
                 >
                   {{ iv.name }}
+                  
                 </div>
                 <div class="mjboxItem">
-                  <div>
+                  <!-- <div>
                     <div>满58减10</div>
-                  </div>
+                  </div> -->
                   <div>¥ {{ iv.retailPrice }}</div>
                 </div>
               </div>
@@ -221,6 +222,7 @@ export default {
           logoImg: i.logoImg,
           phone: i.phone,
           shopName: i.shopName,
+          minCharge:i.minCharge
         },
       });
     },

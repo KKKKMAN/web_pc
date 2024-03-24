@@ -17,7 +17,7 @@
             {{ shopName }}
             <div class="shopPf">{{ score }}</div>
           </div>
-          <div class="lookcouponShow" v-show="!couponShow">
+          <div class="lookcouponShow" v-show="!couponShow" @click="coupon">
             查看已领取的优惠卷
           </div>
           <div v-show="!couponShow" class="guize" @click="syCoupon">
@@ -38,20 +38,24 @@
       <div
         v-for="(v, i) in shopitemList"
         :key="i"
-        @click="shopDataItemId(v.id)"
+        @click="shopDataItemId(v.id,v)"
       >
         <div>
           <img :src="v.img01.split(',')[0]" alt="" />
         </div>
         <div>¥{{ v.retailPrice }}</div>
-        <div>{{ v.productName }}</div>
+        <div class="dis">
+          <div>{{ v.productName }}</div>
+           <img style="cursor: pointer" src="../assets/addshopcar.png" alt="" />
+        </div>
+       
         <div>
-          <div>满{{ v.sales }}减{{ v.hasRemains }}</div>
-          <img style="cursor: pointer" src="../assets/addshopcar.png" alt="" />
+          <!-- <div>满{{ v.sales }}减{{ v.hasRemains }}</div> -->
+         
         </div>
       </div>
-      <!-- <p class="pagesize">
-        <Page
+      <p class="pagesize">
+        <!-- <Page
           show-total
           :total="totalNum"
           :current="currPage"
@@ -60,8 +64,21 @@
           next-text="下一页"
         >
           <template slot> 显示总商品条数</template>
-        </Page>
-      </p> -->
+        </Page> -->
+        <!-- <Page
+          v-if="this.shopitemList.length > 0"
+          class="fixedpage"
+          :current="currentNum"
+          :total="qorderList"
+          show-total
+          :page-size="pageSize"
+          prev-text="上一页"
+          next-text="下一页"
+          @on-change="onChange"
+        >
+          <template>共{{ qorderList }}条订单</template>
+        </Page> -->
+      </p>
     </div>
     <!-- 店铺优惠卷 -->
     <div class="shopCoupo" v-if="shopCoupon.length != 0">
@@ -75,7 +92,7 @@
           <div>
             ￥<span>{{ v.couponPrice }}</span>
           </div>
-          <div>满 {{ v.useMinPrice }} 元使用</div>
+          <div>无门槛使用</div>
         </div>
         <div>
           <div>{{ v.title }} | 限 {{ v.shopName }} 除特价商品使用</div>
@@ -166,9 +183,10 @@ export default {
       couponRule: false, //优惠规则弹窗
       shopitemList: [], //商品列表
       // 查询店铺商品
-      // totalNum: 0, //总条数
-      // currPage: 10, //页数
-      // records: 1, //每页个数
+       // 全部订单
+       currentNum: 1, // 全部当前页码
+      pageSize: 30, // 全部每页条数
+      qorderList: null, //全部条数
     };
   },
   watch: {},
@@ -204,6 +222,7 @@ export default {
         queryCondition04: "", //商品名称（非必输）
       };
       getProductListByCategory(form).then((res) => {
+        console.log(res, "getProductListByCategory");
         if (res || res.status == 200) {
           this.shopitemList = res.data;
         }
@@ -213,7 +232,7 @@ export default {
     gettUserShopCouponListInfo() {
       var form = {
         currPage: 1,
-        records: 10,
+        records: 30,
         status: 1,
         queryCondition01: this.$route.query.shopId,
       };
@@ -224,13 +243,15 @@ export default {
       });
     },
     // 详情页
-    shopDataItemId(id) {
+    shopDataItemId(id,v) {
+      console.log(v)
       let datablank = {
         productId: id,
         shopId: this.$route.query.shopId,
         logoImg: this.$route.query.logoImg,
         phone: this.$route.query.phone,
         shopName: this.$route.query.shopName,
+        minCharge:this.$route.query.minCharge
       };
       this.$router.push({
         path: "/pc/commoditydetailpage",
@@ -259,6 +280,12 @@ export default {
     couponClick() {
       this.couponShow = !this.couponShow;
     },
+    coupon() {
+      this.$router.push({
+        path: '/pc/mycoupon'
+      })
+    },
+    
     // 使用规则
     syCoupon() {
       this.couponRule = true;
@@ -272,16 +299,22 @@ export default {
       this.modalWidth = 600;
       this.modalTop = 200;
       var form = {
-        couponId: value.couponId, //优惠卷id
+        couponId : value.id, //优惠卷id
         shopId: this.$route.query.shopId, //店铺id
         token: localStorage.getItem("token"),
       };
       gettUserShopcollectList(form).then((res) => {
-        if (res || res.status == 200) {
+        console.log(res)
+        if (res) {
+          this.$Message.success({
+                content: res.message,
+                duration: 4,
+            });
           this.lq_if = true;
           this.gettUserShopCouponListInfo();
-        } else {
+
         }
+       
       });
     },
     // 去使用
@@ -612,5 +645,10 @@ export default {
       }
     }
   }
+}
+.dis{
+  display: flex;
+  justify-content: space-between;
+  padding:0 20px;
 }
 </style>

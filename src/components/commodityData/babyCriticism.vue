@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import { getAllCommentByShopId } from "@/utils/api";
 export default {
   name: "babyCriticism",
   components: {},
@@ -79,20 +80,35 @@ export default {
       className: 0,
       babyCriticismTextName: [
         "全部(89)",
-        "好评(89)",
-        "有图/视频(89)",
-        "做工精细(89)",
-        "回头客(89)",
-        "回头客(89)",
+        // "好评(89)",
+        // "有图/视频(89)",
+        // "做工精细(89)",
+        // "回头客(89)",
+        // "回头客(89)",
       ],
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getAllCommentList()
+  },
   methods: {
     babyTextInfo(v, i) {
       this.className = i;
     },
+    getAllCommentList() {
+      const { shopId } = this.$route.query;
+      if(!shopId) {
+        console.error("缺少shopId参数");
+        return;
+      }
+      getAllCommentByShopId(shopId).then(res => {
+
+      })
+      .catch(err => {
+
+      })
+    }
   },
 };
 </script>

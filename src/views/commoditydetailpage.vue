@@ -4,9 +4,9 @@
       <div><img :src="this.$route.query.logoImg" alt="" /></div>
       <div>
         <p>{{ this.$route.query.shopName }}</p>
-        <p>电话：{{ this.$route.query.phone }}</p>
+        <!-- <p>电话：{{ this.$route.query.phone }}</p> -->
       </div>
-      <div>起送价 ¥0.00 配送费 ¥0.00</div>
+      <div>起送价 ¥{{this.$route.query.minCharge}} </div>
       <div>
         <img src="@/assets/phonecolor.png" alt="" />
         <div>
@@ -65,10 +65,10 @@
             <span>¥</span><span>{{ goodsItem.retailPrice }}</span>
           </div>
           <div><span>起送价</span><span>0.00元</span></div>
-          <div>
+          <!-- <div>
             <span>配送费</span
             ><span>商家配送，1.5公里以内免费 / 客户自提免费</span>
-          </div>
+          </div> -->
           <div>
             <span>数量</span>
             <InputNumber
@@ -76,9 +76,10 @@
               controls-outside
               :min="1"
               @on-blur="numBlur"
+              @click="quantity"
             ></InputNumber>
           </div>
-          <div><span>优惠券</span><span>满5.01减5</span></div>
+          <!-- <div><span>优惠券</span><span>满5.01减5</span></div> -->
         </div>
         <div class="comm_box_bottom" @click="addSingleProductToCartInfo">
           加入购物车
@@ -158,9 +159,14 @@ export default {
     },
     // 数字输入框失焦
     numBlur() {
+      
       if (this.numberValue == null) {
         this.numberValue = 1;
+
       }
+    },
+    quantity() {
+      console.log('ssss')
     },
     // 获取商品详情
     getProductByIdInfo() {

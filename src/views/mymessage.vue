@@ -24,11 +24,11 @@
           }}</span>
           个收货地址，最多可设置<span style="color: #ea6240">6</span>个
         </div>
-        <div class="shippingaddressbtn">
+        <!-- <div class="shippingaddressbtn">
           <Button type="primary" ghost label="large" @click="addNewAddress"
             >新增地址</Button
           >
-        </div>
+        </div> -->
       </div>
       <!-- 收货地址 -->
       <ShippingAddress

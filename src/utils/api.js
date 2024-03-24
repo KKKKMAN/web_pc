@@ -90,6 +90,11 @@ export function orderPay(params) {
 export function createQrCode(params) {
   return request.post(`/csm/appApi/pay/createQrCode`, params);
 }
+//支付宝下单二维码
+export function createQrCodes(params) {
+  return request.post(`/csm/appApi/pay/createQrCode`, params);
+}
+
 // 微信支付回调
 export function wxNotifyPlay() {
   return request.post(`/csm/appApi/notify/wxNotify`);
@@ -97,6 +102,10 @@ export function wxNotifyPlay() {
 // 用户取消订单
 export function cancelOrder(params) {
   return request.post(`/csm/appApi/order/cancelOrder`, params);
+}
+//用户再来一单
+export function createOneMoreOrder(params) {
+  return request.post(`/csm/appApi/order/createOneMoreOrder`,params)
 }
 // 根据一级分类获取
 export function getAllCategoryTwoListById(params) {
@@ -173,4 +182,16 @@ export function getAllCityList() {
 //获取我的评价列表
 export function getAllCommentByUserId(params) {
   return request.post(`/csm/appApi/comments/getAllCommentByUserId`, params);
+}
+
+// 获取用户订单评价
+export function addNewOrderComments(params) {
+  return request.post(`/csm/appApi/comments/addNewOrderComments`, params);
+}
+
+//获取店铺评价列表 csm/appApi/shop/getAllCommentByShopId
+export function getAllCommentByShopId(shopId) {
+  return request.get(`csm/appApi/shop/getAllCommentByShopId`, {
+    params: {shopId: shopId}
+  });
 }

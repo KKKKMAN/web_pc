@@ -12,6 +12,7 @@ import shoppingCart from "../views/shoppingCart.vue";
 import settlement from "../views/settlement.vue";
 import commitOrder from "../views/commitOrder.vue";
 import orderstatusdetails from "../views/orderstatusdetails.vue";
+import review from "../views/review.vue"
 Vue.use(VueRouter);
 const routerPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function (location) {
@@ -138,11 +139,19 @@ const routes = [
     component: commitOrder,
   },
   {
+    // 去评论
+    path: "/pc/review",
+    // redirect: "/pc/commitOrder",
+    name: "review",
+    component: review,
+  },
+  {
     //定义404页面
     path: "/pc/404",
     // redirect: "/pc/404",
     component: () => import("../views/notfound.vue"),
   },
+  
   // {
   //   //匹配未定义路由 然后重定向至404页面
   //   path: "/:pathMath(.*)",

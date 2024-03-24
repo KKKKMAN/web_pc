@@ -4,9 +4,9 @@
     <div class="settlementBox_top">
       <div class="settlementBox_top_t">
         <div>选择收货地址</div>
-        <Button type="primary" label="large" style="background-color: #ea6240"
+        <!-- <Button type="primary" label="large" style="background-color: #ea6240"
           >新增收获地址</Button
-        >
+        > -->
       </div>
       <!-- 收货地址 -->
       <div class="settlementBox_top_dzhi">
@@ -40,9 +40,9 @@
           <span>收货时间：</span>
           <span>现在下单，预计送达时间为18:00~18:30</span>
         </div>
-        <Button type="primary" label="large" style="background-color: #ea6240"
+        <!-- <Button type="primary" label="large" style="background-color: #ea6240"
           >更改收货时间</Button
-        >
+        > -->
       </div>
       <Divider />
       <div class="qued_xx">确认订单信息</div>
@@ -282,7 +282,7 @@ export default {
         await new Promise((resolve) => {
           console.log(item, "itemitemitemitem");
           createNewOrder(item).then((res) => {
-            if (res || res.status == 200) {
+            if (res && res.status == 200) {
               resolve(item);
               this.$router.push({
                 path: "/pc/commitOrder",
@@ -291,6 +291,11 @@ export default {
                   total: item.total,
                 },
               });
+            } else {
+              this.$Message.error({
+                content: res.message,
+                duration: 4
+              })
             }
           });
         });

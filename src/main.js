@@ -1,4 +1,5 @@
 import Vue from "vue";
+import { Rate, Upload} from 'element-ui';
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -11,11 +12,14 @@ import preview from "vue-photo-preview";
 import "vue-photo-preview/dist/skin.css";
 import "@/utils/orderStatus";
 import * as mqtt from "mqtt/dist/mqtt";
-
+import 'element-ui/lib/theme-chalk/index.css';
 // import socketApi from "@/utils/websocket";
 // Vue.prototype.$socketApi = socketApi;
 
 Vue.use(mqtt);
+Vue.use(Rate);
+Vue.use(Upload);
+
 let options = {
   fullscreenEl: false, //控制是否显示右上角全屏按钮
   bgOpacity: 0.85,

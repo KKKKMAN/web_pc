@@ -55,7 +55,7 @@ export default {
           id: 2,
         },
         {
-          name: "宝贝信息",
+          name: "商家信息",
           id: 3,
         },
       ],

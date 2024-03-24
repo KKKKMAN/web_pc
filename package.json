@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^1.6.2",
     "core-js": "^3.23.3",
+    "element-ui": "^2.15.14",
     "mqtt": "^5.3.5",
     "view-design": "^4.7.0",
     "vue": "^2.6.14",

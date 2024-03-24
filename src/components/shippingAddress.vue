@@ -3,7 +3,9 @@
     <div
       class="shippingaddressItem"
       v-for="(v, i) in childShippingAddressInfodata"
+      :class="{ active: v.defaultAddress == 1 }"
       :key="i"
+      @click="changeAddress(v)"
     >
       <div class="fle">
         <span class="icons">
@@ -153,6 +155,7 @@
 import { delUserAddressByIds, updateUserAddress } from "@/utils/api";
 export default {
   name: "shippingaddress",
+  addressId: '',
   components: {},
   props: {
     shippingAddressInfodata: {
@@ -268,6 +271,14 @@ export default {
         }
       });
     },
+    changeAddress(itemi) {
+      // console.log(v)
+      this.addressId = itemi.id
+      this.childShippingAddressInfodata.forEach((item) => {
+        item.defaultAddress = 0;
+        itemi.defaultAddress = 1;
+      })
+    }
   },
 };
 </script>
