@@ -92,7 +92,7 @@
                   <!-- <div>
                     <div>满58减10</div>
                   </div> -->
-                  <div>¥ {{ iv.retailPrice }}</div>
+                  <div class="price">¥ {{ iv.retailPrice }}</div>
                 </div>
               </div>
             </div>
@@ -430,5 +430,8 @@ export default {
       }
     }
   }
+}
+.price{
+  color:#ea6240
 }
 </style>

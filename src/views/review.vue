@@ -243,9 +243,9 @@ export default {
        anonymity: Number(this.anonymity),
         shopId:this.$route.query.shopId,
         imageLink: this.images_link.join(","),
+       
       };
       addNewOrderComments(formData).then((res) => {
-        console.log(res, "ssssssss");
         if (res.status === "200") {
           this.$Message.success({
             content: "发表成功",

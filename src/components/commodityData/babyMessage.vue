@@ -44,7 +44,7 @@ export default {
     // 获取商家详情页
     getShopInfoByIdInfo() {
       var shopIdData = {
-        shopId: localStorage.getItem("shopId"),
+        shopId: this.$route.query.shopId,
       };
       getShopInfoById(shopIdData).then((res) => {
         if (res || res.status == 200) {

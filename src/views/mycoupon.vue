@@ -142,9 +142,9 @@ export default {
   methods: {
     onTabChange(name) {
       if(name === 'name1'){
-        this.paramsData.status = 0;
-      }else if(name === 'name2') {
         this.paramsData.status = 1;
+      }else if(name === 'name2') {
+        this.paramsData.status = 0;
       } else if(name === 'name3') {
         this.paramsData.status = 2;
       }
