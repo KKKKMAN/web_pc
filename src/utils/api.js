@@ -127,6 +127,17 @@ export function getShopCouponList(params) {
 export function gettUserShopCouponList(params) {
   return request.post(`/csm/appApi/user/coupon/page`, params);
 }
+// 可用店铺优惠券查询
+export function getQueryActivity(params) {
+    return request({
+        url: "/csm/appApi/shop/coupon/query/activity",
+        method: "get",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        params: params,
+    });
+}
 // 优惠卷领取
 export function gettUserShopcollectList(params) {
   return request({

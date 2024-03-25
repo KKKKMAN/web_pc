@@ -50,7 +50,7 @@
                   {{ v.shopName }} <span class="pfengBox">{{ v.score }}</span>
                 </div>
                 <div>
-                  <span style="margin-right: 24px">起送价 ¥{{v.minCharge}}</span>
+                  <span style="margin-right: 24px">起送价 ¥{{v.minCharge || 0 }}</span>
                   <!-- <span>配送费 ¥20</span> -->
                 </div>
               </div>

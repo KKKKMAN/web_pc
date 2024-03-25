@@ -23,6 +23,9 @@
           <div v-show="!couponShow" class="guize" @click="syCoupon">
             <img src="../assets/guize.png" alt="" /> 使用规则
           </div>
+          <div class="coupon-box" v-if="couponShow && shopCoupon.length > 0">
+            <span>{{ maxCoupon }}元无门槛券</span>
+        </div>
           <div v-show="couponShow">月销总量 {{ sales }}件</div>
         </div>
         <div v-show="couponShow" @click="couponClick">
@@ -198,6 +201,17 @@ export default {
     this.getProductListByCategoryInfo();
     console.log(process.env.BASE_URL, "routeUrl.href");
   },
+  computed:{
+    //算计最大优惠券
+    maxCoupon(){
+        if(this.shopCoupon.length > 0){
+            this.shopCoupon.sort((a, b) => b.couponPrice - a.couponPrice)
+            // 返回第一个选项，即价格最高的选项
+            return this.shopCoupon[0].couponPrice
+        }
+        return 0
+    }
+},
   methods: {
     // 根据店铺id 查询店铺信息
     getShopInfoByIdInfo() {
@@ -510,6 +524,18 @@ export default {
       }
     }
   }
+  .coupon-box {
+        min-width: 68px;
+        padding: 0 10px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        font-size: 12px;
+        background-color: #ea6240;
+        color: #fff;
+        border-radius: 20px;
+        margin-right: 20px;
+    }
   .shopItemdata {
     padding: 35px 0 80px 0;
     width: 1280px;
@@ -649,6 +675,6 @@ export default {
 .dis{
   display: flex;
   justify-content: space-between;
-  padding:0 20px;
+  padding:0 5px !important;
 }
 </style>

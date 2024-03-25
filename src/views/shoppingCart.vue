@@ -20,7 +20,7 @@
           @on-change="handleCheck(v)"
           >{{ v.shopName }}</Checkbox
         >
-        <Dropdown trigger="click" style="margin-left: 30px">
+        <!-- <Dropdown trigger="click" style="margin-left: 30px">
           <Button>
             {{ cuponDropdown }}
             <Icon type="ios-arrow-down"></Icon>
@@ -30,7 +30,7 @@
               v.name
             }}</DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> -->
       </div>
       <div
         class="cuponItem"
@@ -67,7 +67,7 @@
     </div>
     <div class="confirmFrom" v-drag>
       <div>
-        共 <span>{{ arrList }}</span> 件商品
+        共 <span>{{ goodsCount }}</span> 件商品
       </div>
       <div>
         合计 <span>¥ {{ shoppAdds }}</span>
@@ -88,7 +88,6 @@ export default {
     return {
       title: this.$route.meta.title,
       shopState: 0, //店铺状态
-      arrList: 0, //选中商品数量
       cuponDropdown: "优惠券",
       cuponDropdownList: [
         {
@@ -145,6 +144,18 @@ export default {
       }
       return total.toString().replace(/\B(?=(\d{3})+$)/g, ","); //3位式显示金额
     },
+    //选中商品数
+    goodsCount(){
+        let sum = 0
+        for(let i of this.cuponListDataList){
+            for(let k of i.cartItemList){
+                if(k.checkAllchild){
+                    sum += 1
+                }
+            }
+        }
+        return sum
+    }
   },
   created() {},
   mounted() {
@@ -220,6 +231,12 @@ export default {
     },
     // 结算
     settlementInfo() {
+        console.log('this.goodsCount',this.goodsCount);
+        if(this.goodsCount == 0){
+            return this.$Message.warning({
+                content: "请选择需要结算的商品",
+            });
+        }
       this.checkAllGroupp = [];
       this.cuponListDataList.forEach((item, index) => {
         if (item.checkAll) {

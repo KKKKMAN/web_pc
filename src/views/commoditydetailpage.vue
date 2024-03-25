@@ -6,7 +6,7 @@
         <p>{{ this.$route.query.shopName }}</p>
         <!-- <p>电话：{{ this.$route.query.phone }}</p> -->
       </div>
-      <div>起送价 ¥{{this.$route.query.minCharge}} </div>
+      <div>起送价 ¥{{this.$route.query.minCharge || 0 }} </div>
       <div>
         <img src="@/assets/phonecolor.png" alt="" />
         <div>
@@ -64,7 +64,7 @@
           <div>
             <span>¥</span><span>{{ goodsItem.retailPrice }}</span>
           </div>
-          <div><span>起送价</span><span>0.00元</span></div>
+          <!-- <div><span>起送价</span><span>0.00元</span></div> -->
           <!-- <div>
             <span>配送费</span
             ><span>商家配送，1.5公里以内免费 / 客户自提免费</span>
