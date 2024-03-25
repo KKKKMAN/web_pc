@@ -11,12 +11,12 @@ import "@/utils/videodrag";
 import preview from "vue-photo-preview";
 import "vue-photo-preview/dist/skin.css";
 import "@/utils/orderStatus";
-// import * as mqtt from "mqtt/dist/mqtt";
+import * as mqtt from "mqtt/dist/mqtt";
 import 'element-ui/lib/theme-chalk/index.css';
 // import socketApi from "@/utils/websocket";
 // Vue.prototype.$socketApi = socketApi;
 
-// Vue.use(mqtt);
+Vue.use(mqtt);
 Vue.use(Rate);
 Vue.use(Upload);
 
