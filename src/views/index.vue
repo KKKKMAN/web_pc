@@ -11,7 +11,7 @@
           loop
         >
           <CarouselItem v-for="(v, i) in posterList" :key="i">
-            <div class="demo-carousel">
+            <div class="demo-carousel" @click="imgclick(v)">
               <img :src="v.img01" alt="" />
             </div>
           </CarouselItem>
@@ -50,7 +50,9 @@
                   {{ v.shopName }} <span class="pfengBox">{{ v.score }}</span>
                 </div>
                 <div>
-                  <span style="margin-right: 24px">起送价 ¥{{v.minCharge || 0 }}</span>
+                  <span style="margin-right: 24px"
+                    >起送价 ¥{{ v.minCharge || 0 }}</span
+                  >
                   <!-- <span>配送费 ¥20</span> -->
                 </div>
               </div>
@@ -86,7 +88,6 @@
                   "
                 >
                   {{ iv.name }}
-                  
                 </div>
                 <div class="mjboxItem">
                   <!-- <div>
@@ -118,7 +119,12 @@
 
 <script>
 import { mapGetters } from "vuex"; //导入vuex的辅助函数
-import { getLoginUserInfo, getPosterInfo, getAppShopList } from "../utils/api";
+import {
+  getLoginUserInfo,
+  getPosterInfo,
+  getAppShopList,
+  getProductById,
+} from "../utils/api";
 export default {
   name: "index",
   components: {},
@@ -179,6 +185,17 @@ export default {
         }
       });
     },
+    // 轮播图跳转详情页
+    imgclick(v) {
+      // console.log(v, "vvv");
+      let datablank = {
+        productId: v.shopId,
+      };
+      this.$router.push({
+        path: "/pc/commoditydetailpage",
+        query: datablank,
+      });
+    },
     // 获取商家商品列表
     getAppShopListInfo() {
       // 商家分页列表
@@ -222,7 +239,7 @@ export default {
           logoImg: i.logoImg,
           phone: i.phone,
           shopName: i.shopName,
-          minCharge:i.minCharge
+          minCharge: i.minCharge,
         },
       });
     },
@@ -287,9 +304,6 @@ export default {
 :deep(.ivu-tabs-bar) {
   border-bottom: 1px solid #ea6240;
 }
-// :deep(.ivu-tabs-nav .ivu-tabs-tab:hover) {
-//   color: #ccc;
-// }
 :deep(.ivu-tabs-tab-focused) {
   color: #fff;
   .ivu-tabs-nav .ivu-tabs-tab:hover {
@@ -431,7 +445,7 @@ export default {
     }
   }
 }
-.price{
-  color:#ea6240
+.price {
+  color: #ea6240;
 }
 </style>

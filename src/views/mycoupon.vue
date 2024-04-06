@@ -1,7 +1,7 @@
 <template>
   <div class="mycoupon">
     <orderBreadcrumb :title="title" />
-    <Tabs value="name1" @on-click="onTabChange">
+    <Tabs v-model="tabsname" @on-click="onTabChange">
       <TabPane label="未使用" name="name1">
         <Table stripe :columns="unusedColumns" :data="unusedData">
           <template slot-scope="{ row, index }" slot="action">
@@ -12,29 +12,29 @@
         </Table>
       </TabPane>
       <TabPane label="已使用" name="name2">
-        <Table stripe :columns="columns2" :data="unusedData">
+        <Table stripe :columns="columns2" :data="columnsdata">
           <template slot="action">
             <span style="color: #ea6240">已使用</span>
           </template></Table
         >
       </TabPane>
-      <TabPane label="已过期" name="name3">
-        <Table stripe :columns="columns3" :data="unusedData">
+      <!-- <TabPane label="已过期" name="name3">
+        <Table stripe :columns="columns3" :data="errordata">
           <template slot="action"> 已过期 </template></Table
         >
-      </TabPane>
+      </TabPane> -->
     </Tabs>
-    <Page
+    <!-- <Page
       :current="paramsData.currPage"
-      :total="totalNum"
+      :total="paramsData.totalNum"
       show-total
-      :page-size="pageSize"
+      :page-size="paramsData.pageSize"
       prev-text="上一页"
       next-text="下一页"
       @on-change="onChange"
     >
       <template>共{{ totalNum }}条优惠卷</template>
-    </Page>
+    </Page> -->
   </div>
 </template>
 
@@ -49,9 +49,11 @@ export default {
     return {
       title: this.$route.meta.title,
       totalNum: null, //总条数
+      tabsname: "name1",
       currentNum: 1, // 当前页码
       pageSize: 10, // 每页条数
       unusedData: [], //未使用数据
+      columnsdata: [], //已使用
       unusedColumns: [
         {
           title: "面额",
@@ -102,54 +104,29 @@ export default {
           align: "center",
         },
       ],
-      columns3: [
-        {
-          title: "面额",
-          key: "couponPrice",
-        },
-        {
-          title: "适用范围",
-          key: "shopName",
-        },
-        {
-          title: "有效期",
-          key: "endTime",
-        },
-        {
-          title: "领取来源",
-          key: "title",
-        },
-        {
-          title: "状态",
-          key: "action",
-          slot: "action",
-          width: 150,
-          align: "center",
-        },
-      ],
       paramsData: {
+        totalNum: null,
         currPage: 1,
-        records: 10,
+        records: 10000,
         status: 0, //状态：0-未使用，1-已使用，2-已过期
         queryCondition01: "",
-      }
+
+      },
     };
   },
   created() {},
   mounted() {
-    this.gettUserShopCouponListInfo();
+    this.onTabChange("name1");
   },
   methods: {
     onTabChange(name) {
-      if(name === 'name1'){
+      if (name === "name1") {
         this.paramsData.status = 1;
-      }else if(name === 'name2') {
+        this.gettUserShopCouponListInfo1();
+      } else if (name === "name2") {
         this.paramsData.status = 0;
-      } else if(name === 'name3') {
-        this.paramsData.status = 2;
+        this.gettUserShopCouponListInfo2();
       }
-      this.paramsData.currPage = 1;
-      this.gettUserShopCouponListInfo();
     },
     dataItem(value) {
       // console.log(value, "value");
@@ -161,16 +138,21 @@ export default {
       });
     },
     // 页码改变
-    onChange(e) {
-      // this.currentNum = e;
-      this.paramsData.currPage = e;
-      this.gettUserShopCouponListInfo();
-    },
+    // onChange(e) {
+    //   this.currentNum = e;
+    //   // this.paramsData.currPage = e;
+    //   this.paramsData.currPage = e;
+    //   this.gettUserShopCouponListInfo();
+    // },
     // 我的优惠卷
-    gettUserShopCouponListInfo() {
+    gettUserShopCouponListInfo1() {
       gettUserShopCouponList(this.paramsData).then((res) => {
         this.unusedData = res.data.list;
-        this.totalNum = res.data.total;
+      });
+    },
+    gettUserShopCouponListInfo2() {
+      gettUserShopCouponList(this.paramsData).then((res) => {
+        this.columnsdata = res.data.list;
       });
     },
   },

@@ -160,7 +160,6 @@ export default {
         queryCondition02: "wx", //支付类型 wx；zfb
       };
       createQrCode(data).then((res) => {
-        console.log(res)
         if (res || res.status === 200) {
           if (res.data) {
             this.wechatSrc = res.data;
@@ -179,24 +178,7 @@ export default {
         queryCondition02: "zfb", //支付类型 wx；zfb
       };
       createQrCodes(data).then((res) => {
-       
           this.srcdocUrl = res.data
-          // 添加之前先删除一下，如果单页面，页面不刷新，添加进去的内容会一直保留在页面中，二次调用form表单会出错
-        // const divForm = document.getElementsByTagName("div");
-        // if (divForm.length) {
-        //   document.body.removeChild(divForm[0]);
-        // }
-        // const div = document.createElement("div");
-        // div.innerHTML = res.data; // data就是接口返回的form 表单字符串
-        // document.body.appendChild(div);
-        // document.forms[0].setAttribute("target", "_blank"); // 新开窗口跳转
-        // document.forms[0].submit();
-        
-        //   console.log(res, "获取支付宝二维码");
-          // document.querySelector("body").innerHTML = res.data;
-          //   document.forms[0].submit();
-
-        
       });
     },
    

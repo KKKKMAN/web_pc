@@ -258,7 +258,6 @@ export default {
     },
     // 详情页
     shopDataItemId(id,v) {
-      console.log(v)
       let datablank = {
         productId: id,
         shopId: this.$route.query.shopId,

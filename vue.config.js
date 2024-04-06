@@ -1,7 +1,23 @@
 const { defineConfig } = require("@vue/cli-service");
+const TerserPlugin = require("terser-webpack-plugin");
 module.exports = defineConfig({
   transpileDependencies: true,
 });
+module.exports = {
+  configureWebpack: (config) => {
+    config.optimization = {
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              drop_console: true,
+            },
+          },
+        }),
+      ],
+    };
+  },
+};
 module.exports = {
   assetsDir: "static",
   publicPath: process.env.NODE_ENV === "production" ? "./" : "/",
