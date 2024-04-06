@@ -129,7 +129,6 @@ export default {
       }
     },
     dataItem(value) {
-      // console.log(value, "value");
       this.$router.push({
         path: "/pc/shopParticulars",
         query: {
