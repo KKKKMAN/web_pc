@@ -56,7 +56,7 @@
           <div>{{ v.productName }}</div>
         </div>
         <div>¥ {{ v.price }}</div>
-        <div>-¥</div>
+        <div>-¥ {{ (orderdetailsList.actualPay - orderdetailsList.total).toFixed(2) }}</div>
         <div>{{ v.number }}</div>
         <div>¥{{ (v.price * v.number).toFixed(2) }}</div>
       </div>
