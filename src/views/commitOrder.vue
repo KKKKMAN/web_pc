@@ -54,7 +54,7 @@
           />
         </div>
         <div v-show="!payShow">
-       <iframe
+          <iframe
             :srcdoc="srcdocUrl"
             frameborder="no"
             border="0"
@@ -64,9 +64,8 @@
             width="300"
             height="300"
             style="overflow: hidden"
-          >          
+          >
           </iframe>
-         
         </div>
 
         <p>扫一扫快速付款</p>
@@ -105,7 +104,12 @@
 </template>
 
 <script>
-import { orderPay, createQrCode, wxNotifyPlay ,createQrCodes} from "../utils/api";
+import {
+  orderPay,
+  createQrCode,
+  wxNotifyPlay,
+  createQrCodes,
+} from "../utils/api";
 import vueQr from "vue-qr";
 import { socket } from "@/utils/websocket";
 export default {
@@ -113,7 +117,7 @@ export default {
   components: { vueQr },
   data() {
     return {
-      alipay: '',
+      alipay: "",
       dataTime: new Date().getTime() + 30000,
       playTime: false,
       playsucces: true,
@@ -132,7 +136,6 @@ export default {
     this.createQrCodeWXInfo();
     // 发起连接
     // socket.init();
-    
   },
   methods: {
     ok() {},
@@ -149,7 +152,7 @@ export default {
     cutPayClick() {
       this.payShow = !this.payShow;
       this.textPay = this.payShow ? "微信" : "支付宝";
-      if(!this.payShow) {
+      if (!this.payShow) {
         this.createQrCodeZFBInfo(); //支付宝form 获取
       }
     },
@@ -178,10 +181,9 @@ export default {
         queryCondition02: "zfb", //支付类型 wx；zfb
       };
       createQrCodes(data).then((res) => {
-          this.srcdocUrl = res.data
+        this.srcdocUrl = res.data;
       });
     },
-   
   },
 };
 </script>
