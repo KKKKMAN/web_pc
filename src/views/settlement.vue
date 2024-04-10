@@ -333,6 +333,7 @@ export default {
           // updateTime: "", //更新时间
           // verifyTime: "", //核销时间
           // videoConfirmTime: "", //视频确认时间
+          couponId: this.couponId, //优惠券id
           csmUserAddressId: this.addressId, //用户收货地址id
           remarks: this.remarks, //备注
           total: "", //总价
@@ -707,7 +708,7 @@ export default {
 
   .vb_box {
     background-color: #fff;
-    padding: 0 30px;
+    padding: 0 30px 15px 30px;
 
     .video_box {
       display: flex;
