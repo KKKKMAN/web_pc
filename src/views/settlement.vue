@@ -86,7 +86,7 @@
             </div>
             <div>- ¥ 0.0</div>
         </div> -->
-    <div class="settlementBox_b_youhui t_right" v-if="couponList.length > 0">
+    <div class="settlementBox_b_youhui t_right">
       <div>
         <span>优惠券：</span>
         <Select style="width: 200px" @on-select="onSelect">
@@ -362,7 +362,7 @@ export default {
         this.addshopList.push(storeList);
       });
       this.addshopList.forEach(async (item) => {
-        console.log(item,'itemitemitem')
+        console.log(item, "itemitemitem");
         await new Promise((resolve) => {
           createNewOrder(item).then((res) => {
             if (res && res.status == 200) {
