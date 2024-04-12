@@ -56,7 +56,7 @@
           <div>{{ v.productName }}</div>
         </div>
         <div>¥ {{ v.price }}</div>
-        <div>-¥ {{ (orderdetailsList.actualPay - orderdetailsList.total).toFixed(2) }}</div>
+        <div>¥ {{ (orderdetailsList.actualPay - orderdetailsList.total).toFixed(2) }}</div>
         <div>{{ v.number }}</div>
         <div>¥{{ (v.price * v.number).toFixed(2) }}</div>
       </div>
@@ -73,7 +73,7 @@
       <div class="oc_b">
         <div>
           <span class="oc_b_n">商品总价：</span
-          ><span class="oc_b_p">¥ {{ orderdetailsList.total }}</span>
+          ><span class="oc_b_p">¥ {{ orderdetailsList.actualPay }}</span>
         </div>
         <div>
           <span class="oc_b_n">配送费：</span><span class="oc_b_p">¥ 0.00</span>
@@ -84,7 +84,7 @@
         </div> -->
         <div>
           <span class="oc_b_n">应付金额：</span
-          ><span class="oc_b_p">¥ {{ orderdetailsList.actualPay }}</span>
+          ><span class="oc_b_p">¥ {{ orderdetailsList.total }}</span>
         </div>
         <div v-if="orderdetailsList.orderStatus == '000' ? true : false">
           <div class="quxiao" @click="cancelOrderInfo">取消订单</div>
