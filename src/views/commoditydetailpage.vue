@@ -34,6 +34,7 @@
                   : this.smallimgList[0].bigImg
               "
               class="big_img"
+              alt=""
             />
           </div>
         </div>
@@ -95,7 +96,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { getProductById, addSingleProductToCart } from "@/utils/api";
 import imgInfo from "@/utils/img_box";
@@ -133,9 +133,7 @@ export default {
     },
     // 左切换
     img_left() {
-      if (this.activeClass == 0) {
-        return;
-      } else {
+      if (this.activeClass !== 0) {
         this.activeClass--;
         var left_img = this.smallimgList[this.activeClass];
         this.box_img = left_img.img;
@@ -144,15 +142,9 @@ export default {
     },
     // 右切换
     img_right() {
-      // let outDiv = document.querySelector(".ui_box");
-      // let outDivli = document.querySelector("li");
-      // this.scrollLeft -= this.step;
-      // outDiv.scrollTo(this.scrollLeft, 0);
-      if (this.activeClass == this.smallimgList.length - 1) {
-        return;
-      } else {
+      if (this.activeClass !== this.smallimgList.length - 1) {
         this.activeClass++;
-        var right_img = this.smallimgList[this.activeClass];
+        const right_img = this.smallimgList[this.activeClass];
         this.box_img = right_img.img;
         this.big_img = right_img.bigImg;
       }
@@ -449,7 +441,7 @@ export default {
           span:nth-child(2) {
             font-size: 35px;
             font-weight: 500;
-            font-family: Source Han Sans CN-Medium;
+            font-family: Source Han Sans CN-Medium,system-ui;
           }
         }
         > div:nth-child(3) {

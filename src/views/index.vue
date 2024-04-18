@@ -124,7 +124,7 @@ import {
   getPosterInfo,
   getAppShopList,
   getProductById,
-} from "../utils/api";
+} from "@/utils/api";
 export default {
   name: "index",
   components: {},
